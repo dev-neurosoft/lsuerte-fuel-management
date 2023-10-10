@@ -21,6 +21,7 @@ dependencies:
   shared_preferences: ^2.2.1
   intl: ^0.18.1
   paged_datatable: ^1.4.3
+  async_button_builder: ^3.0.0+1
 
   #* postgrest *#
   postgrest: ^1.5.1

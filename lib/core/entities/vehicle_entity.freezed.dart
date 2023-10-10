@@ -25,6 +25,7 @@ mixin _$VehicleEntity {
   VehicleModelEntity get model => throw _privateConstructorUsedError;
   FuelEntity get fuel => throw _privateConstructorUsedError;
   num get year => throw _privateConstructorUsedError;
+  @JsonKey(name: "fuel_quantity")
   num? get fuelQuantity => throw _privateConstructorUsedError;
   String get code => throw _privateConstructorUsedError;
   num? get kilometres => throw _privateConstructorUsedError;
@@ -47,7 +48,7 @@ abstract class $VehicleEntityCopyWith<$Res> {
       VehicleModelEntity model,
       FuelEntity fuel,
       num year,
-      num? fuelQuantity,
+      @JsonKey(name: "fuel_quantity") num? fuelQuantity,
       String code,
       num? kilometres});
 
@@ -153,7 +154,7 @@ abstract class _$$VehicleEntityImplCopyWith<$Res>
       VehicleModelEntity model,
       FuelEntity fuel,
       num year,
-      num? fuelQuantity,
+      @JsonKey(name: "fuel_quantity") num? fuelQuantity,
       String code,
       num? kilometres});
 
@@ -231,7 +232,7 @@ class _$VehicleEntityImpl implements _VehicleEntity {
       required this.model,
       required this.fuel,
       required this.year,
-      this.fuelQuantity = 0,
+      @JsonKey(name: "fuel_quantity") this.fuelQuantity = 0,
       required this.code,
       this.kilometres = null});
 
@@ -249,7 +250,7 @@ class _$VehicleEntityImpl implements _VehicleEntity {
   @override
   final num year;
   @override
-  @JsonKey()
+  @JsonKey(name: "fuel_quantity")
   final num? fuelQuantity;
   @override
   final String code;
@@ -305,7 +306,7 @@ abstract class _VehicleEntity implements VehicleEntity {
       required final VehicleModelEntity model,
       required final FuelEntity fuel,
       required final num year,
-      final num? fuelQuantity,
+      @JsonKey(name: "fuel_quantity") final num? fuelQuantity,
       required final String code,
       final num? kilometres}) = _$VehicleEntityImpl;
 
@@ -323,6 +324,7 @@ abstract class _VehicleEntity implements VehicleEntity {
   @override
   num get year;
   @override
+  @JsonKey(name: "fuel_quantity")
   num? get fuelQuantity;
   @override
   String get code;

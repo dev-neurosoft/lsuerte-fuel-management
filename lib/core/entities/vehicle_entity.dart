@@ -19,7 +19,7 @@ sealed class VehicleEntity with _$VehicleEntity {
     required VehicleModelEntity model,
     required FuelEntity fuel,
     required num year,
-    @Default(0) num? fuelQuantity,
+    @JsonKey(name: "fuel_quantity") @Default(0) num? fuelQuantity,
     required String code,
     @Default(null) num? kilometres,
   }) = _VehicleEntity;

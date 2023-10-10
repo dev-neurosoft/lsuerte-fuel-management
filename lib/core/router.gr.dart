@@ -41,6 +41,12 @@ abstract class _$AppRouter extends RootStackRouter {
         child: SignInView(key: args.key),
       );
     },
+    TicketFromRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const TicketFromView(),
+      );
+    },
     TicketRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
@@ -130,6 +136,20 @@ class SignInRouteArgs {
   String toString() {
     return 'SignInRouteArgs{key: $key}';
   }
+}
+
+/// generated route for
+/// [TicketFromView]
+class TicketFromRoute extends PageRouteInfo<void> {
+  const TicketFromRoute({List<PageRouteInfo>? children})
+      : super(
+          TicketFromRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'TicketFromRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for

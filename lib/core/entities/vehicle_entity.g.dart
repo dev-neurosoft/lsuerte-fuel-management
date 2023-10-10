@@ -13,7 +13,7 @@ _$VehicleEntityImpl _$$VehicleEntityImplFromJson(Map<String, dynamic> json) =>
       model: VehicleModelEntity.fromJson(json['model'] as Map<String, dynamic>),
       fuel: FuelEntity.fromJson(json['fuel'] as Map<String, dynamic>),
       year: json['year'] as num,
-      fuelQuantity: json['fuelQuantity'] as num? ?? 0,
+      fuelQuantity: json['fuel_quantity'] as num? ?? 0,
       code: json['code'] as String,
       kilometres: json['kilometres'] as num? ?? null,
     );
@@ -25,7 +25,7 @@ Map<String, dynamic> _$$VehicleEntityImplToJson(_$VehicleEntityImpl instance) =>
       'model': instance.model,
       'fuel': instance.fuel,
       'year': instance.year,
-      'fuelQuantity': instance.fuelQuantity,
+      'fuel_quantity': instance.fuelQuantity,
       'code': instance.code,
       'kilometres': instance.kilometres,
     };

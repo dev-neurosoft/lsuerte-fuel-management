@@ -94,8 +94,8 @@ class _HomeViewState extends State<HomeView> {
               ),
               destinations: const [
                 NavigationRailDestination(
-                  icon: Icon(Icons.list_outlined),
-                  selectedIcon: Icon(Icons.list),
+                  icon: Icon(Icons.receipt_outlined),
+                  selectedIcon: Icon(Icons.receipt),
                   label: Text("Tickets"),
                 ),
                 NavigationRailDestination(

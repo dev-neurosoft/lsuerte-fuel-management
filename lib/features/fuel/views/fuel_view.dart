@@ -54,10 +54,7 @@ class FuelView extends StatelessWidget {
                 .update({"quantity": double.parse(newValue)})
                 .eq(FuelEntity.primaryKey, item.id)
                 .then((_) => true)
-                .onError((error, __) {
-                  debugPrint(error.toString());
-                  return false;
-                }),
+                .onError((error, __) => false),
           ),
           DropdownTableColumn(
             sizeFactor: null,

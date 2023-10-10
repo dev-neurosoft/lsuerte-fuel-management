@@ -26,15 +26,24 @@ class VehicleView extends StatefulWidget {
 
 class _VehicleViewState extends State<VehicleView> {
   final _controller = getIt.get<VehicleController>();
-  final _pagedController = PagedDataTableController<String, String, VehicleEntity>();
+  late final PagedDataTableController<String, String, VehicleEntity> _pagedController;
 
   @override
   void initState() {
     super.initState();
 
     SchedulerBinding.instance.addPostFrameCallback(
-      (_) => _controller.initialize(),
+      (_) {
+        _controller.initialize();
+        _pagedController = PagedDataTableController<String, String, VehicleEntity>();
+      },
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pagedController.dispose();
   }
 
   @override
@@ -81,7 +90,7 @@ class _VehicleViewState extends State<VehicleView> {
                   }
 
                   if (filtering.has("code")) {
-                    builder.ilike("code", filtering.valueOrNull("code"));
+                    builder.ilike("code", "%${filtering.valueOrNull("code")}%");
                   }
 
                   if (filtering.has("brand")) {

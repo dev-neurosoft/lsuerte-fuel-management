@@ -7,6 +7,7 @@ import '../features/auth/views/user_view.dart';
 import '../features/fuel/views/fuel_view.dart';
 import '../features/home/views/home_view.dart';
 import '../features/ticket/views/ticket_view.dart';
+import '../features/ticket/views/ticket_form_view.dart';
 import '../features/vehicle/views/vehicle_view.dart';
 import '../features/vehicle/views/assignment_view.dart';
 import 'services.dart';
@@ -21,10 +22,16 @@ class AppRouter extends _$AppRouter {
     return [
       CustomRoute(
         page: HomeRoute.page,
-        initial: true,
         guards: [_AuthGuard()],
+        initial: true,
         children: [
-          CustomRoute(page: TicketRoute.page, transitionsBuilder: TransitionsBuilders.fadeIn),
+          CustomRoute(
+            page: TicketRoute.page,
+            initial: true,
+            transitionsBuilder: TransitionsBuilders.fadeIn,
+            maintainState: false,
+          ),
+          CustomRoute(page: TicketFromRoute.page, transitionsBuilder: TransitionsBuilders.fadeIn),
           CustomRoute(page: VehicleRoute.page, transitionsBuilder: TransitionsBuilders.fadeIn, maintainState: false),
           CustomRoute(page: AssignmentRoute.page, transitionsBuilder: TransitionsBuilders.fadeIn),
           CustomRoute(page: FuelRoute.page, transitionsBuilder: TransitionsBuilders.fadeIn),
