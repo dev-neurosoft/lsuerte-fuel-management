@@ -25,6 +25,7 @@ class AuthController extends ValueNotifier<AuthControllerState> {
   final PostgrestClient _client;
 
   bool get loggedIn => value.user != null;
+  UserEntity? get user => value.user;
   String? get userId => value.user?.id;
   String? get userName => value.user?.name;
 

@@ -47,7 +47,7 @@ class FuelView extends StatelessWidget {
           ),
           TextTableColumn(
             sizeFactor: null,
-            title: "Cantidad Disponible",
+            title: "Cantidad disponible",
             getter: (item) => item.quantity.toStringAsFixed(2),
             setter: (item, newValue, rowIndex) => database
                 .from(FuelEntity.tableName)
@@ -56,32 +56,32 @@ class FuelView extends StatelessWidget {
                 .then((_) => true)
                 .onError((error, __) => false),
           ),
-          DropdownTableColumn(
-            sizeFactor: null,
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.zero,
-              fillColor: Colors.transparent,
-            ),
-            title: "Activo",
-            getter: (item) => item.active,
-            setter: (item, newValue, rowIndex) => database
-                .from(FuelEntity.tableName)
-                .update({"active": newValue})
-                .eq(FuelEntity.primaryKey, item.id)
-                .then((_) => true)
-                .onError((_, __) => false),
-            items: [
-              const DropdownMenuItem(
-                value: true,
-                child: Text("Activo"),
-              ),
-              const DropdownMenuItem(
-                value: false,
-                child: Text("Inactivo"),
-              ),
-            ],
-          ),
+          // DropdownTableColumn(
+          //   sizeFactor: null,
+          //   decoration: const InputDecoration(
+          //     border: InputBorder.none,
+          //     contentPadding: EdgeInsets.zero,
+          //     fillColor: Colors.transparent,
+          //   ),
+          //   title: "Activo",
+          //   getter: (item) => item.active,
+          //   setter: (item, newValue, rowIndex) => database
+          //       .from(FuelEntity.tableName)
+          //       .update({"active": newValue})
+          //       .eq(FuelEntity.primaryKey, item.id)
+          //       .then((_) => true)
+          //       .onError((_, __) => false),
+          //   items: [
+          //     const DropdownMenuItem(
+          //       value: true,
+          //       child: Text("Activo"),
+          //     ),
+          //     const DropdownMenuItem(
+          //       value: false,
+          //       child: Text("Inactivo"),
+          //     ),
+          //   ],
+          // ),
         ],
         idGetter: (item) => item.id,
       ),

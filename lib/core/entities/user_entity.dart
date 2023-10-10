@@ -5,6 +5,13 @@ import 'user_rol_entity.dart';
 part 'user_entity.freezed.dart';
 part 'user_entity.g.dart';
 
+extension UserEntityX on UserEntity {
+  bool get canDeativateTicket => [
+        "759aa591-3920-4a12-8ea7-6e150adebc78",
+        "f5b971c9-b4d0-497f-876e-3377b96e8021",
+      ].contains(rol.id);
+}
+
 @Freezed()
 sealed class UserEntity with _$UserEntity {
   const factory UserEntity({

@@ -42,7 +42,7 @@ class SignInView extends StatelessWidget {
           height: context.appSize.height * 0.8,
           child: FormBuilder(
             key: _formKey,
-            child: ListView(
+            child: Column(
               children: [
                 Padding(
                   padding: p4,
@@ -51,7 +51,7 @@ class SignInView extends StatelessWidget {
                 vgap(40),
                 FormBuilderTextField(
                   name: 'username',
-                  decoration: const InputDecoration(label: Text("Usuario")),
+                  decoration: const InputDecoration(label: Text("Correo/Usuario")),
                   validator: FormBuilderValidators.required(),
                   onSubmitted: (_) => _doSignIn(context),
                 ),

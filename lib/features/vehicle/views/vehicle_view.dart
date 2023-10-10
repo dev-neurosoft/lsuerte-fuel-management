@@ -114,8 +114,8 @@ class _VehicleViewState extends State<VehicleView> {
               filters: [
                 TextTableFilter(
                   id: "code",
-                  title: "Matricula",
-                  chipFormatter: (text) => "Matricula: $text",
+                  title: "Placa",
+                  chipFormatter: (text) => "Placa: $text",
                 ),
                 DropdownTableFilter(
                   items: brands.map((e) {
@@ -150,7 +150,7 @@ class _VehicleViewState extends State<VehicleView> {
                       .eq(VehicleEntity.primaryKey, item.id)
                       .then((_) => true)
                       .onError((_, __) => false),
-                  title: "Matricula",
+                  title: "Placa",
                 ),
                 DropdownTableColumn(
                   sizeFactor: null,
@@ -379,7 +379,7 @@ class VehicleForm extends StatelessWidget {
                 vgap(10),
                 FormBuilderTextField(
                   name: 'code',
-                  decoration: const InputDecoration(label: Text("Matricula")),
+                  decoration: const InputDecoration(label: Text("Placa")),
                   validator: FormBuilderValidators.required(),
                 ),
                 vgap(10),

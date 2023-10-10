@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:fuel_management/core/entities/user_entity.dart';
 import 'package:fuel_management/core/entities/vehicle_entity.dart';
 import 'package:intl/intl.dart';
 import 'package:paged_datatable/paged_datatable.dart';
@@ -124,32 +125,33 @@ class _TicketViewState extends State<TicketView> {
             title: 'Usuario',
             cellBuilder: (ticket) => Text(ticket.createdBy.name),
           ),
-          DropdownTableColumn(
-            sizeFactor: null,
-            decoration: const InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.zero,
-              fillColor: Colors.transparent,
+          if (authController.user?.canDeativateTicket ?? false)
+            DropdownTableColumn(
+              sizeFactor: null,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                contentPadding: EdgeInsets.zero,
+                fillColor: Colors.transparent,
+              ),
+              title: "Estado",
+              getter: (item) => item.active,
+              setter: (item, newValue, rowIndex) => database
+                  .from(TicketEntity.tableName)
+                  .update({"active": newValue})
+                  .eq(TicketEntity.primaryKey, item.id)
+                  .then((_) => true)
+                  .onError((_, __) => false),
+              items: [
+                const DropdownMenuItem(
+                  value: true,
+                  child: Text("Activo"),
+                ),
+                const DropdownMenuItem(
+                  value: false,
+                  child: Text("Anulado"),
+                ),
+              ],
             ),
-            title: "Estado",
-            getter: (item) => item.active,
-            setter: (item, newValue, rowIndex) => database
-                .from(TicketEntity.tableName)
-                .update({"active": newValue})
-                .eq(TicketEntity.primaryKey, item.id)
-                .then((_) => true)
-                .onError((_, __) => false),
-            items: [
-              const DropdownMenuItem(
-                value: true,
-                child: Text("Activo"),
-              ),
-              const DropdownMenuItem(
-                value: false,
-                child: Text("Anulado"),
-              ),
-            ],
-          ),
           TableColumn(
             sizeFactor: null,
             title: 'Acciones',
@@ -243,7 +245,7 @@ class TicketDetailDialog extends StatelessWidget {
                     children: [
                       Padding(padding: p8, child: Text("Usuario", style: context.textTheme.titleMedium)),
                       Padding(padding: p8, child: Text("Vehiculo", style: context.textTheme.titleMedium)),
-                      Padding(padding: p8, child: Text("Matricula", style: context.textTheme.titleMedium)),
+                      Padding(padding: p8, child: Text("Placa", style: context.textTheme.titleMedium)),
                       Padding(padding: p8, child: Text("Combustible", style: context.textTheme.titleMedium)),
                       Padding(padding: p8, child: Text("Banca", style: context.textTheme.titleMedium)),
                       Padding(padding: p8, child: Text("Cantidad", style: context.textTheme.titleMedium)),

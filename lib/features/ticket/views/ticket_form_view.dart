@@ -12,6 +12,7 @@ import '../../../core/entities/betting_bank_entity.dart';
 import '../../../core/entities/ticket_detail_entity.dart';
 import '../../../core/entities/ticket_entity.dart';
 import '../../../core/entities/user_entity.dart';
+import '../../../core/entities/vehicle_assignment_entity.dart';
 import '../../../core/entities/vehicle_entity.dart';
 import '../../../core/extension.dart';
 import '../../../core/router.dart';
@@ -139,8 +140,9 @@ class _TicketFromViewState extends State<TicketFromView> {
         centerTitle: true,
         title: const Text("Crear Ticket"),
         actions: [
+          hgap(10),
           IconButton(onPressed: () => router.replace(const TicketRoute()), icon: const Icon(Icons.close)),
-          hgap(10)
+          hgap(10),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -174,7 +176,10 @@ class _TicketFromViewState extends State<TicketFromView> {
                   Flexible(
                     child: TextFormField(
                       readOnly: true,
-                      decoration: const InputDecoration(label: Text("Usuario")),
+                      decoration: const InputDecoration(
+                        label: Text("Usuario"),
+                        isDense: true,
+                      ),
                       initialValue: authController.userName,
                     ),
                   ),
@@ -182,7 +187,10 @@ class _TicketFromViewState extends State<TicketFromView> {
                   Flexible(
                     child: TextFormField(
                       readOnly: true,
-                      decoration: const InputDecoration(label: Text("Fecha")),
+                      decoration: const InputDecoration(
+                        label: Text("Fecha"),
+                        isDense: true,
+                      ),
                       initialValue: DateFormat("dd/MM/yyyy").format(DateTime.now()),
                     ),
                   ),
@@ -190,10 +198,36 @@ class _TicketFromViewState extends State<TicketFromView> {
                   Flexible(
                     child: TextFormField(
                       readOnly: true,
-                      decoration: const InputDecoration(label: Text("Hora")),
+                      decoration: const InputDecoration(
+                        label: Text("Hora"),
+                        isDense: true,
+                      ),
                       initialValue: DateFormat("hh:mm a").format(DateTime.now()),
                     ),
                   ),
+                  hgap(5),
+                  Flexible(
+                    child: FormBuilderSearchableDropdown<VehicleAssignmentEntity>(
+                      name: 'assignment',
+                      compareFn: (item1, item2) => item1 == item2,
+                      decoration: const InputDecoration(
+                        label: Text("Asignaciones"),
+                        isDense: true,
+                      ),
+                      asyncItems: (text) => database
+                          .from(VehicleAssignmentEntity.tableName)
+                          .select<PostgrestList>(VehicleAssignmentEntity.select)
+                          .ilike("users.name", "%$text%")
+                          .limit(10)
+                          .withConverter((data) => data.map((e) => VehicleAssignmentEntity.fromJson(e)).toList()),
+                      itemAsString: (item) => "${item.user.name} [${item.vehicle.code}]",
+                      onChanged: (item) {
+                        _formKey.currentState?.fields["user"]?.didChange(item?.user);
+                        _formKey.currentState?.fields["vehicle"]?.didChange(item?.vehicle);
+                        _formKey.currentState?.fields["quantity"]?.didChange(item?.quantity.toStringAsFixed(2));
+                      },
+                    ),
+                  )
                 ],
               ),
               vgap(10),
@@ -287,7 +321,7 @@ class _TicketFromViewState extends State<TicketFromView> {
                         children: [
                           Padding(padding: p8, child: Text("Usuario", style: context.textTheme.titleMedium)),
                           Padding(padding: p8, child: Text("Vehiculo", style: context.textTheme.titleMedium)),
-                          Padding(padding: p8, child: Text("Matricula", style: context.textTheme.titleMedium)),
+                          Padding(padding: p8, child: Text("Placa", style: context.textTheme.titleMedium)),
                           Padding(padding: p8, child: Text("Combustible", style: context.textTheme.titleMedium)),
                           Padding(padding: p8, child: Text("Banca", style: context.textTheme.titleMedium)),
                           Padding(padding: p8, child: Text("Cantidad", style: context.textTheme.titleMedium)),
