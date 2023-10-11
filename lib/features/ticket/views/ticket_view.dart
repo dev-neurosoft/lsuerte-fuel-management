@@ -62,7 +62,7 @@ class _TicketViewState extends State<TicketView> {
       body: PagedDataTable<String, String, TicketEntity>(
         initialPage: "",
         controller: _pagedController,
-        idGetter: (item) => item.code,
+        idGetter: (item) => item.id,
         fetchPage: (pageToken, pageSize, sortBy, filtering) async {
           try {
             final builder = database
@@ -82,8 +82,9 @@ class _TicketViewState extends State<TicketView> {
             }
 
             final PostgrestResponse(:count, :data) = await builder.limit(pageSize).order("code", ascending: false);
+
             final vehicles = data?.map((e) => TicketEntity.fromJson(e)).toList() ?? [];
-            final nextPage = vehicles.length < pageSize ? null : vehicles.last.id;
+            var nextPage = vehicles.length < pageSize ? null : vehicles.last.code;
 
             return PaginationResult.items(elements: vehicles, size: count, nextPageToken: nextPage);
           } on PostgrestException catch (error) {
