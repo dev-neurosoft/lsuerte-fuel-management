@@ -6,10 +6,10 @@ import '../features/auth/views/sign_in_view.dart';
 import '../features/auth/views/user_view.dart';
 import '../features/fuel/views/fuel_view.dart';
 import '../features/home/views/home_view.dart';
-import '../features/ticket/views/ticket_view.dart';
 import '../features/ticket/views/ticket_form_view.dart';
-import '../features/vehicle/views/vehicle_view.dart';
+import '../features/ticket/views/ticket_view.dart';
 import '../features/vehicle/views/assignment_view.dart';
+import '../features/vehicle/views/vehicle_view.dart';
 import 'services.dart';
 
 part 'router.gr.dart';

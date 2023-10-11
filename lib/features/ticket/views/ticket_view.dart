@@ -1,7 +1,5 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:fuel_management/core/entities/user_entity.dart';
-import 'package:fuel_management/core/entities/vehicle_entity.dart';
 import 'package:intl/intl.dart';
 import 'package:paged_datatable/paged_datatable.dart';
 import 'package:postgrest/postgrest.dart';
@@ -9,6 +7,8 @@ import 'package:postgrest/postgrest.dart';
 import '../../../core/constants.dart';
 import '../../../core/entities/ticket_detail_entity.dart';
 import '../../../core/entities/ticket_entity.dart';
+import '../../../core/entities/user_entity.dart';
+import '../../../core/entities/vehicle_entity.dart';
 import '../../../core/extension.dart';
 import '../../../core/router.dart';
 import '../../../core/services.dart';

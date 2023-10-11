@@ -1,8 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:fuel_management/core/entities/user_entity.dart';
 
 import 'betting_bank_entity.dart';
 import 'fuel_entity.dart';
+import 'user_entity.dart';
 import 'vehicle_entity.dart';
 
 part 'ticket_detail_entity.freezed.dart';
