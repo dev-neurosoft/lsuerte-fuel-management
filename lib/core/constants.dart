@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 
 const appTitle = "Fuel Management";
-const postgrestEndpoint = "http://172.16.220.52:3000";
-
+//const postgrestEndpoint = "http://172.16.220.52:3000";
+const postgrestEndpoint = "http://142.93.194.9:3000";
 SizedBox gap(double size) => SizedBox(height: size, width: size);
 SizedBox hgap(double size) => SizedBox(width: size);
 SizedBox vgap(double size) => SizedBox(height: size);
