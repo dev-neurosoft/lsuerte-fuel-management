@@ -59,8 +59,31 @@ class _TicketFormViewState extends State<TicketFormView> {
     _details.value = currentDetails;
   }
 
-  Future<void> _onPrint(BuildContext context, TicketEntity ticket) async {
-    return printerRepository.printTicket(ticket);
+  Future<void> _onPrint(
+    BuildContext context,
+    TicketEntity ticket,
+  ) {
+    return printerRepository.printTicket(
+      ticket: ticket,
+      onSuccess: () => {
+        context.scaffoldMessenger.showSnackBar(
+          const SnackBar(
+            content: Text("Ticket impreso"),
+            showCloseIcon: true,
+            behavior: SnackBarBehavior.floating,
+          ),
+        ),
+      },
+      onFailure: (message) {
+        context.scaffoldMessenger.showSnackBar(
+          SnackBar(
+            content: Text(message),
+            showCloseIcon: true,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      },
+    );
   }
 
   Future<void> _onSubmit(BuildContext context) async {

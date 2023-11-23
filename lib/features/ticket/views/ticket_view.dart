@@ -39,7 +39,27 @@ class _TicketViewState extends State<TicketView> {
 
   Future<void> _onPrint(BuildContext context, TicketEntity ticket) => _getTicketDetails(ticket)
       .then((details) => ticket.copyWith(details: details))
-      .then((ticketWithDetails) => printerRepository.printTicket(ticketWithDetails));
+      .then((ticketWithDetails) => printerRepository.printTicket(
+            ticket: ticket,
+            onSuccess: () => {
+              context.scaffoldMessenger.showSnackBar(
+                const SnackBar(
+                  content: Text("Ticket impreso"),
+                  showCloseIcon: true,
+                  behavior: SnackBarBehavior.floating,
+                ),
+              ),
+            },
+            onFailure: (message) {
+              context.scaffoldMessenger.showSnackBar(
+                SnackBar(
+                  content: Text(message),
+                  showCloseIcon: true,
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            },
+          ));
 
   @override
   void initState() {

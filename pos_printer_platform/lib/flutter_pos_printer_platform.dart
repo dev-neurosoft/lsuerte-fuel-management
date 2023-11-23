@@ -10,3 +10,7 @@ export './src/printers/tspl.dart';
 export './printer.dart';
 export './src/printer_manager.dart';
 export './src/models/printer_device.dart';
+export './esc_pos_utils_platform/src/capability_profile.dart';
+export './esc_pos_utils_platform/src/enums.dart';
+export './esc_pos_utils_platform/src/generator.dart';
+export './esc_pos_utils_platform/src/pos_styles.dart';

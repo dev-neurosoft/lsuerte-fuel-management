@@ -292,14 +292,30 @@ class VehicleForm extends StatelessWidget {
         })
         .then((_) => onVehicleCreated())
         .then((_) => Navigator.of(context).pop())
-        .onError(
-          (error, stackTrace) => context.scaffoldMessenger.showSnackBar(
-            SnackBar(
-              content: Text(error.toString()),
-              behavior: SnackBarBehavior.floating,
-              showCloseIcon: true,
-            ),
-          ),
+        .onError<PostgrestException>(
+          (error, _) {
+            if (error.code == "23505") {
+              context.scaffoldMessenger.showSnackBar(
+                SnackBar(
+                  content: Text("${brand.name} ${model.name} $year [$code] ya existe"),
+                  behavior: SnackBarBehavior.floating,
+                  showCloseIcon: true,
+                ),
+              );
+
+              return;
+            }
+
+            context.scaffoldMessenger.showSnackBar(
+              SnackBar(
+                content: Text(error.toString()),
+                behavior: SnackBarBehavior.floating,
+                showCloseIcon: true,
+              ),
+            );
+
+            return;
+          },
         );
   }
 

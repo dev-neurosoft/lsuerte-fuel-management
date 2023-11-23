@@ -1,52 +1,76 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:fuel_management/features/ticket/repositories/printer_bytegen.dart'; // Asegúrate de que esta importación sea correcta
+import 'package:flutter_pos_printer_platform/flutter_pos_printer_platform.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../core/entities/ticket_detail_entity.dart';
 import '../../../core/entities/ticket_entity.dart';
-import 'printer_service.dart';
+import 'ticket_to_bytes_helper.dart';
 
 @LazySingleton()
 class PrinterRepository {
-  Future<void> printTicket(TicketEntity ticket) async {
-    debugPrint(jsonEncode(ticket.toJson()));
+  Future<void> printTicket({
+    required TicketEntity ticket,
+    required VoidCallback onSuccess,
+    required ValueChanged<String> onFailure,
+  }) async {
+    final availablePrinters = <PrinterDevice>[];
+    const steps = 8;
 
-    Map<String, dynamic> jsonTicket = ticket.toJson();
-    TicketBody ticketBody = fromJsonToTicketBody(jsonTicket);
-    List<int> bytes = await getTicketBytes(ticketBody);
-    await PosPrinterService.instance.printTicket(Future.value(bytes));
+    try {
+      for (var i = 0; i < steps; i++) {
+        PrinterManager.instance.discovery(type: PrinterType.usb).listen((device) {
+          if (device.name != null && device.name!.toUpperCase().contains('POS')) {
+            availablePrinters.add(device);
+          }
+        });
+
+        if (availablePrinters.isNotEmpty) {
+          break;
+        } else {
+          await Future.delayed(const Duration(seconds: 1));
+        }
+      }
+
+      if (availablePrinters.isEmpty) {
+        onFailure('No se encontraron impresoras.');
+        return;
+      }
+
+      for (PrinterDevice printer in availablePrinters) {
+        bool isConnected = await PrinterManager.instance.connect(
+          type: PrinterType.usb,
+          model: UsbPrinterInput(
+            name: printer.name,
+            productId: printer.productId,
+            vendorId: printer.vendorId,
+          ),
+        );
+
+        if (!isConnected) {
+          onFailure('No se pudo conectar a la impresora ${printer.name}. Intentando con otra...');
+          continue;
+        }
+
+        final result = await PrinterManager.instance.send(
+          type: PrinterType.usb,
+          bytes: await convertTicketToBytes(ticket: ticket),
+        );
+
+        if (!result) {
+          onFailure('No se pudo imprimir el ticket. Intentando con otra...');
+          continue;
+        }
+
+        await PrinterManager.instance.disconnect(type: PrinterType.usb);
+
+        onSuccess();
+        break;
+      }
+
+      if (availablePrinters.isEmpty) {
+        onFailure('No se pudo conectar a ninguna impresora.');
+      }
+    } catch (error) {
+      onFailure(error.toString());
+    }
   }
-}
-
-TicketBody fromJsonToTicketBody(Map<String, dynamic> json) {
-  List<DetailEntity> details = [];
-
-  for (var detail in json['details']) {
-    TicketDetailEntity ticketDetail = detail;
-    // He agregado eso porque he notado que al enviar a imprimir hay campos sin validar y envia el error de String Null.
-    // TODO: Validar campos de Ticket para evitar que se envien vacios.
-
-    details.add(DetailEntity(
-      forUser: ticketDetail.user.name,
-      roomId: ticketDetail.bettingBank?.name ?? "",
-      bettingBankName: ticketDetail.bettingBank?.name ?? "",
-      vehicleBrand: ticketDetail.vehicle.brand.name,
-      vehicleModel: ticketDetail.vehicle.model.name,
-      vehicleCode: ticketDetail.vehicle.code,
-      vehicleMileage: ticketDetail.vehicle.kilometres ?? 0,
-      fuelQuantity: ticketDetail.quantity.toDouble(),
-      fuelName: ticketDetail.fuel.name,
-    ));
-  }
-
-  return TicketBody(
-    id: json['id'] ?? "",
-    createdAt: json['created_at'] ?? "",
-    createdBy: json['createdBy']?.name ?? "",
-    details: details,
-    note: json['note'] ?? "",
-    use24HourFormat: true,
-  );
 }

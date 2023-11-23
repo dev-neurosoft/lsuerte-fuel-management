@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:fuel_management/core/extension.dart';
 import 'package:paged_datatable/paged_datatable.dart';
 import 'package:postgrest/postgrest.dart';
 
 import '../../../core/entities/fuel_entity.dart';
+import '../../../core/extension.dart';
 import '../../../core/services.dart';
 
 @RoutePage()
