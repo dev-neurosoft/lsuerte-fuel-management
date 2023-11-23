@@ -28,11 +28,12 @@ class _AssignmentViewState extends State<AssignmentView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 1,
         title: const Text("Asignaciones"),
         centerTitle: false,
         actions: [
           Builder(
-            builder: (context) => TextButton(
+            builder: (context) => FilledButton(
               onPressed: () => Scaffold.of(context).openEndDrawer(),
               child: const Text("Asignar vehículo"),
             ),
@@ -48,7 +49,6 @@ class _AssignmentViewState extends State<AssignmentView> {
       body: PagedDataTable<String, String, VehicleAssignmentEntity>(
         controller: _pagedController,
         theme: PagedDataTableThemeData(
-          border: Border.all(color: context.colorScheme.outline),
           rowsTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
           headerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
           footerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),

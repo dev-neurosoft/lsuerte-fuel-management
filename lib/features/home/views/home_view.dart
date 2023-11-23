@@ -41,12 +41,12 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       body: AutoTabsRouter(
         routes: const [
+          TicketFormRoute(),
           TicketRoute(),
           VehicleRoute(),
           AssignmentRoute(),
           FuelRoute(),
           UserRoute(),
-          TicketFormRoute(),
         ],
         builder: (context, widget) {
           return Row(
@@ -79,6 +79,11 @@ class _HomeViewState extends State<HomeView> {
                 ),
                 destinations: const [
                   NavigationRailDestination(
+                    icon: Icon(Icons.add),
+                    selectedIcon: Icon(Icons.add),
+                    label: Text("Crear Ticket"),
+                  ),
+                  NavigationRailDestination(
                     icon: Icon(Icons.receipt_outlined),
                     selectedIcon: Icon(Icons.receipt),
                     label: Text("Tickets"),
@@ -106,7 +111,8 @@ class _HomeViewState extends State<HomeView> {
                 ],
                 selectedIndex: AutoTabsRouter.of(context).activeIndex,
               ),
-              Expanded(child: widget),
+              const VerticalDivider(width: 5),
+              Flexible(child: widget),
             ],
           );
         },

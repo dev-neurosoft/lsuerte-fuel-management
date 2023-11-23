@@ -25,14 +25,9 @@ class AppRouter extends _$AppRouter {
         guards: [_AuthGuard()],
         initial: true,
         children: [
-          CustomRoute(
-            page: TicketRoute.page,
-            initial: true,
-            transitionsBuilder: TransitionsBuilders.fadeIn,
-            maintainState: false,
-          ),
-          CustomRoute(page: TicketFormRoute.page, transitionsBuilder: TransitionsBuilders.fadeIn),
-          CustomRoute(page: VehicleRoute.page, transitionsBuilder: TransitionsBuilders.fadeIn, maintainState: false),
+          CustomRoute(page: TicketRoute.page, transitionsBuilder: TransitionsBuilders.fadeIn),
+          CustomRoute(page: TicketFormRoute.page, initial: true, transitionsBuilder: TransitionsBuilders.fadeIn),
+          CustomRoute(page: VehicleRoute.page, transitionsBuilder: TransitionsBuilders.fadeIn),
           CustomRoute(page: AssignmentRoute.page, transitionsBuilder: TransitionsBuilders.fadeIn),
           CustomRoute(page: FuelRoute.page, transitionsBuilder: TransitionsBuilders.fadeIn),
           CustomRoute(page: UserRoute.page, transitionsBuilder: TransitionsBuilders.fadeIn),

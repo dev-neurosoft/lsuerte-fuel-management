@@ -15,13 +15,13 @@ class FuelView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 1,
         title: const Text("Combustibles"),
         centerTitle: false,
       ),
       body: PagedDataTable<String, String, FuelEntity>(
         rowsSelectable: false,
         theme: PagedDataTableThemeData(
-          border: Border.all(color: context.colorScheme.outline),
           rowsTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
           headerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
           footerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),

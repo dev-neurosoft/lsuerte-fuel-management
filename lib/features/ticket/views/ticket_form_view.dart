@@ -15,7 +15,6 @@ import '../../../core/entities/user_entity.dart';
 import '../../../core/entities/vehicle_assignment_entity.dart';
 import '../../../core/entities/vehicle_entity.dart';
 import '../../../core/extension.dart';
-import '../../../core/router.dart';
 import '../../../core/services.dart';
 
 @RoutePage()
@@ -136,14 +135,10 @@ class _TicketFormViewState extends State<TicketFormView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 1,
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: const Text("Crear Ticket"),
-        actions: [
-          hgap(10),
-          IconButton(onPressed: () => router.replace(const TicketRoute()), icon: const Icon(Icons.close)),
-          hgap(10),
-        ],
       ),
       bottomNavigationBar: BottomAppBar(
         child: Row(

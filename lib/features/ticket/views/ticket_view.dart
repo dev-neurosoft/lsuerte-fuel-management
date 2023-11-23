@@ -10,7 +10,6 @@ import '../../../core/entities/ticket_entity.dart';
 import '../../../core/entities/user_entity.dart';
 import '../../../core/entities/vehicle_entity.dart';
 import '../../../core/extension.dart';
-import '../../../core/router.dart';
 import '../../../core/services.dart';
 
 @RoutePage()
@@ -22,7 +21,7 @@ class TicketView extends StatefulWidget {
 }
 
 class _TicketViewState extends State<TicketView> {
-  final _pagedController = PagedDataTableController<String, String, TicketEntity>();
+  late final PagedDataTableController<String, String, TicketEntity> _pagedController;
 
   Future<List<TicketDetailEntity>> _getTicketDetails(TicketEntity ticket) => database
       .from(TicketDetailEntity.tableName)
@@ -43,27 +42,24 @@ class _TicketViewState extends State<TicketView> {
       .then((ticketWithDetails) => printerRepository.printTicket(ticketWithDetails));
 
   @override
+  void initState() {
+    super.initState();
+    _pagedController = PagedDataTableController<String, String, TicketEntity>();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 1,
         title: const Text("Tickets"),
         centerTitle: false,
-        actions: [
-          Builder(
-            builder: (context) => TextButton(
-              onPressed: () => router.navigate(const TicketFormRoute()),
-              child: const Text("Crear Ticket"),
-            ),
-          ),
-          hgap(10),
-        ],
       ),
       body: PagedDataTable<String, String, TicketEntity>(
         initialPage: "",
         controller: _pagedController,
         idGetter: (item) => item.id,
         theme: PagedDataTableThemeData(
-          border: Border.all(color: context.colorScheme.outline),
           rowsTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
           headerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
           footerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),

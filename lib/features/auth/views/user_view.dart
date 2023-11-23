@@ -32,11 +32,12 @@ class _UserViewState extends State<UserView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 1,
         title: const Text("Usuarios"),
         centerTitle: false,
         actions: [
           Builder(
-            builder: (context) => TextButton(
+            builder: (context) => FilledButton(
               onPressed: () => Scaffold.of(context).openEndDrawer(),
               child: const Text("Agregar Usuario"),
             ),
@@ -53,7 +54,6 @@ class _UserViewState extends State<UserView> {
         return PagedDataTable<String, String, UserEntity>(
           controller: _pagedController,
           theme: PagedDataTableThemeData(
-            border: Border.all(color: context.colorScheme.outline),
             rowsTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
             headerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
             footerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),

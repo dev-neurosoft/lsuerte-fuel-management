@@ -26,17 +26,13 @@ class VehicleView extends StatefulWidget {
 
 class _VehicleViewState extends State<VehicleView> {
   final _controller = getIt.get<VehicleController>();
-  late final PagedDataTableController<String, String, VehicleEntity> _pagedController;
+  final _pagedController = PagedDataTableController<String, String, VehicleEntity>();
 
   @override
   void initState() {
     super.initState();
-
     SchedulerBinding.instance.addPostFrameCallback(
-      (_) {
-        _controller.initialize();
-        _pagedController = PagedDataTableController<String, String, VehicleEntity>();
-      },
+      (_) => _controller.initialize(),
     );
   }
 
@@ -44,11 +40,12 @@ class _VehicleViewState extends State<VehicleView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          elevation: 1,
           title: const Text("Vehículos"),
           centerTitle: false,
           actions: [
             Builder(
-              builder: (context) => TextButton(
+              builder: (context) => FilledButton(
                 onPressed: () => Scaffold.of(context).openEndDrawer(),
                 child: const Text("Agregar Vehículo"),
               ),
@@ -75,7 +72,6 @@ class _VehicleViewState extends State<VehicleView> {
               initialPage: "",
               idGetter: (item) => item.id,
               theme: PagedDataTableThemeData(
-                border: Border.all(color: context.colorScheme.outline),
                 rowsTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
                 headerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
                 footerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
