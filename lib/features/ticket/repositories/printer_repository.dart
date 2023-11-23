@@ -6,7 +6,7 @@ import '../../../core/entities/ticket_entity.dart';
 import 'ticket_to_bytes_helper.dart';
 
 @LazySingleton()
-class PrinterRepository {
+final class PrinterRepository {
   Future<void> printTicket({
     required TicketEntity ticket,
     required VoidCallback onSuccess,
@@ -70,7 +70,8 @@ class PrinterRepository {
         onFailure('No se pudo conectar a ninguna impresora.');
       }
     } catch (error) {
-      onFailure(error.toString());
+      debugPrint(error.toString());
+      onFailure("No se pudo imprimir el ticket");
     }
   }
 }
