@@ -92,8 +92,12 @@ class _TicketViewState extends State<TicketView> {
                       .format(filtering.valueOrNull("date")));
             }
 
-            final PostgrestResponse(:count, :data) =
-                await builder.limit(pageSize).order("code", ascending: false);
+
+            final PostgrestResponse(:count, :data) = await builder.limit(pageSize).order("code", ascending: false);
+
+            final vehicles = data?.map((e) => TicketEntity.fromJson(e)).toList() ?? [];
+            var nextPage = vehicles.length < pageSize ? null : vehicles.last.code;
+
 
             final vehicles =
                 data?.map((e) => TicketEntity.fromJson(e)).toList() ?? [];
