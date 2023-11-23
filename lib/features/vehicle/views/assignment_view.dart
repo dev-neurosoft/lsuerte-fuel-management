@@ -47,6 +47,12 @@ class _AssignmentViewState extends State<AssignmentView> {
       ),
       body: PagedDataTable<String, String, VehicleAssignmentEntity>(
         controller: _pagedController,
+        theme: PagedDataTableThemeData(
+          border: Border.all(color: context.colorScheme.outline),
+          rowsTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
+          headerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
+          footerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
+        ),
         fetchPage: (pageToken, pageSize, sortBy, filtering) async {
           try {
             final builder = database.from(VehicleAssignmentEntity.tableName).select<PostgrestListResponse>(

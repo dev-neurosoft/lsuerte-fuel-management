@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:fuel_management/core/entities/ticket_detail_entity.dart';
 import 'package:fuel_management/features/ticket/repositories/printer_bytegen.dart'; // Asegúrate de que esta importación sea correcta
-import 'package:fuel_management/features/ticket/repositories/printer_service.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../core/entities/ticket_detail_entity.dart';
 import '../../../core/entities/ticket_entity.dart';
+import 'printer_service.dart';
 
 @LazySingleton()
 class PrinterRepository {
@@ -22,20 +22,22 @@ class PrinterRepository {
 
 TicketBody fromJsonToTicketBody(Map<String, dynamic> json) {
   List<DetailEntity> details = [];
+
   for (var detail in json['details']) {
     TicketDetailEntity ticketDetail = detail;
-    // He agregado eso porque he notado que al enviar a imprimir hay campos sin validar y envia el error de String Null. 
-    // TODO: Validar campos de Ticket para evitar que se envien vacios. 
+    // He agregado eso porque he notado que al enviar a imprimir hay campos sin validar y envia el error de String Null.
+    // TODO: Validar campos de Ticket para evitar que se envien vacios.
+
     details.add(DetailEntity(
-      forUser: ticketDetail.user?.name ?? "",
+      forUser: ticketDetail.user.name,
       roomId: ticketDetail.bettingBank?.name ?? "",
       bettingBankName: ticketDetail.bettingBank?.name ?? "",
-      vehicleBrand: ticketDetail.vehicle?.brand?.name ?? "",
-      vehicleModel: ticketDetail.vehicle?.model?.name ?? "",
-      vehicleCode: ticketDetail.vehicle?.code ?? "",
-      vehicleMileage: ticketDetail.vehicle?.kilometres ?? 0,
-      fuelQuantity: ticketDetail.quantity?.toDouble() ?? 0.0,
-      fuelName: ticketDetail.fuel?.name ?? "",
+      vehicleBrand: ticketDetail.vehicle.brand.name,
+      vehicleModel: ticketDetail.vehicle.model.name,
+      vehicleCode: ticketDetail.vehicle.code,
+      vehicleMileage: ticketDetail.vehicle.kilometres ?? 0,
+      fuelQuantity: ticketDetail.quantity.toDouble(),
+      fuelName: ticketDetail.fuel.name,
     ));
   }
 
@@ -45,6 +47,6 @@ TicketBody fromJsonToTicketBody(Map<String, dynamic> json) {
     createdBy: json['createdBy']?.name ?? "",
     details: details,
     note: json['note'] ?? "",
-    use24HourFormat: true, 
+    use24HourFormat: true,
   );
 }

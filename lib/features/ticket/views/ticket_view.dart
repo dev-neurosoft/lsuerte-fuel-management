@@ -22,32 +22,25 @@ class TicketView extends StatefulWidget {
 }
 
 class _TicketViewState extends State<TicketView> {
-  final _pagedController =
-      PagedDataTableController<String, String, TicketEntity>();
+  final _pagedController = PagedDataTableController<String, String, TicketEntity>();
 
-  Future<List<TicketDetailEntity>> _getTicketDetails(TicketEntity ticket) =>
-      database
-          .from(TicketDetailEntity.tableName)
-          .select<PostgrestList>(TicketDetailEntity.select)
-          .eq(TicketDetailEntity.primaryKey, ticket.id)
-          .withConverter<List<TicketDetailEntity>>((data) =>
-              data.map((e) => TicketDetailEntity.fromJson(e)).toList());
+  Future<List<TicketDetailEntity>> _getTicketDetails(TicketEntity ticket) => database
+      .from(TicketDetailEntity.tableName)
+      .select<PostgrestList>(TicketDetailEntity.select)
+      .eq(TicketDetailEntity.primaryKey, ticket.id)
+      .withConverter<List<TicketDetailEntity>>((data) => data.map((e) => TicketDetailEntity.fromJson(e)).toList());
 
-  Future<void> _onShowDetail(BuildContext context, TicketEntity ticket) =>
-      _getTicketDetails(ticket)
-          .then((details) => ticket.copyWith(details: details))
-          .then((ticketWithDetails) => showDialog(
-                barrierDismissible: false,
-                context: context,
-                builder: (context) =>
-                    TicketDetailDialog(ticket: ticketWithDetails),
-              ));
+  Future<void> _onShowDetail(BuildContext context, TicketEntity ticket) => _getTicketDetails(ticket)
+      .then((details) => ticket.copyWith(details: details))
+      .then((ticketWithDetails) => showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) => TicketDetailDialog(ticket: ticketWithDetails),
+          ));
 
-  Future<void> _onPrint(BuildContext context, TicketEntity ticket) =>
-      _getTicketDetails(ticket)
-          .then((details) => ticket.copyWith(details: details))
-          .then((ticketWithDetails) =>
-              printerRepository.printTicket(ticketWithDetails));
+  Future<void> _onPrint(BuildContext context, TicketEntity ticket) => _getTicketDetails(ticket)
+      .then((details) => ticket.copyWith(details: details))
+      .then((ticketWithDetails) => printerRepository.printTicket(ticketWithDetails));
 
   @override
   Widget build(BuildContext context) {
@@ -58,24 +51,28 @@ class _TicketViewState extends State<TicketView> {
         actions: [
           Builder(
             builder: (context) => TextButton(
-              onPressed: () => router.replace(const TicketFromRoute()),
+              onPressed: () => router.navigate(const TicketFormRoute()),
               child: const Text("Crear Ticket"),
             ),
           ),
           hgap(10),
         ],
       ),
-      endDrawer: const Drawer(),
       body: PagedDataTable<String, String, TicketEntity>(
         initialPage: "",
         controller: _pagedController,
         idGetter: (item) => item.id,
+        theme: PagedDataTableThemeData(
+          border: Border.all(color: context.colorScheme.outline),
+          rowsTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
+          headerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
+          footerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
+        ),
         fetchPage: (pageToken, pageSize, sortBy, filtering) async {
           try {
             final builder = database
                 .from(TicketEntity.tableName)
-                .select<PostgrestListResponse>(TicketEntity.select,
-                    const FetchOptions(count: CountOption.exact));
+                .select<PostgrestListResponse>(TicketEntity.select, const FetchOptions(count: CountOption.exact));
 
             if (pageToken.isNotEmpty) {
               builder.lt("code", pageToken);
@@ -86,26 +83,15 @@ class _TicketViewState extends State<TicketView> {
             }
 
             if (filtering.has("date")) {
-              builder.eq(
-                  "created_at_text",
-                  DateFormat("yyyy-MM-dd")
-                      .format(filtering.valueOrNull("date")));
+              builder.eq("created_at_text", DateFormat("yyyy-MM-dd").format(filtering.valueOrNull("date")));
             }
-
 
             final PostgrestResponse(:count, :data) = await builder.limit(pageSize).order("code", ascending: false);
 
             final vehicles = data?.map((e) => TicketEntity.fromJson(e)).toList() ?? [];
             var nextPage = vehicles.length < pageSize ? null : vehicles.last.code;
 
-
-            final vehicles =
-                data?.map((e) => TicketEntity.fromJson(e)).toList() ?? [];
-            var nextPage =
-                vehicles.length < pageSize ? null : vehicles.last.code;
-
-            return PaginationResult.items(
-                elements: vehicles, size: count, nextPageToken: nextPage);
+            return PaginationResult.items(elements: vehicles, size: count, nextPageToken: nextPage);
           } on PostgrestException catch (error) {
             return PaginationResult.error(error: error.message);
           }
@@ -121,36 +107,31 @@ class _TicketViewState extends State<TicketView> {
             lastDate: DateTime.now(),
             id: "date",
             title: "Fecha",
-            chipFormatter: (date) =>
-                "Fecha: ${DateFormat("dd/MM/yyyy").format(date)}",
+            chipFormatter: (date) => "Fecha: ${DateFormat("dd/MM/yyyy").format(date)}",
           ),
         ],
         columns: [
           TableColumn(
             sizeFactor: null,
             title: 'Número',
-            cellBuilder: (ticket) =>
-                Text(ticket.code, style: const TextStyle(color: Colors.black)),
+            cellBuilder: (ticket) => Text(ticket.code, style: const TextStyle(color: Colors.black)),
           ),
           TableColumn(
             sizeFactor: null,
             title: 'Fecha',
-            cellBuilder: (ticket) => Text(
-                DateFormat("dd/MM/yyyy").format(ticket.createdAt),
-                style: const TextStyle(color: Colors.black)),
+            cellBuilder: (ticket) =>
+                Text(DateFormat("dd/MM/yyyy").format(ticket.createdAt), style: const TextStyle(color: Colors.black)),
           ),
           TableColumn(
             sizeFactor: null,
             title: 'Hora',
-            cellBuilder: (ticket) => Text(
-                DateFormat("hh:mm a").format(ticket.createdAt),
-                style: const TextStyle(color: Colors.black)),
+            cellBuilder: (ticket) =>
+                Text(DateFormat("hh:mm a").format(ticket.createdAt), style: const TextStyle(color: Colors.black)),
           ),
           TableColumn(
             sizeFactor: null,
             title: 'Usuario',
-            cellBuilder: (ticket) => Text(ticket.createdBy.name,
-                style: const TextStyle(color: Colors.black)),
+            cellBuilder: (ticket) => Text(ticket.createdBy.name, style: const TextStyle(color: Colors.black)),
           ),
           if (authController.user?.canDeativateTicket ?? false)
             DropdownTableColumn(
@@ -219,9 +200,7 @@ class TicketDetailDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       actions: [
-        FilledButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Cerrar")),
+        FilledButton(onPressed: () => Navigator.pop(context), child: const Text("Cerrar")),
       ],
       title: Center(child: Text(ticket.code)),
       content: SizedBox(
@@ -245,8 +224,7 @@ class TicketDetailDialog extends StatelessWidget {
                     child: TextFormField(
                       readOnly: true,
                       decoration: const InputDecoration(label: Text("Fecha")),
-                      initialValue:
-                          DateFormat("dd/MM/yyyy").format(ticket.createdAt),
+                      initialValue: DateFormat("dd/MM/yyyy").format(ticket.createdAt),
                     ),
                   ),
                   hgap(5),
@@ -254,8 +232,7 @@ class TicketDetailDialog extends StatelessWidget {
                     child: TextFormField(
                       readOnly: true,
                       decoration: const InputDecoration(label: Text("Hora")),
-                      initialValue:
-                          DateFormat("hh:mm a").format(ticket.createdAt),
+                      initialValue: DateFormat("hh:mm a").format(ticket.createdAt),
                     ),
                   ),
                 ],
@@ -276,79 +253,49 @@ class TicketDetailDialog extends StatelessWidget {
                   TableRow(
                     decoration: BoxDecoration(
                       border: Border(
-                        bottom: BorderSide(
-                            color: context.colorScheme.onBackground
-                                .withOpacity(0.1),
-                            width: 2),
+                        bottom: BorderSide(color: context.colorScheme.onBackground.withOpacity(0.1), width: 2),
                       ),
                     ),
                     children: [
-                      Padding(
-                          padding: p8,
-                          child: Text("Usuario",
-                              style: context.textTheme.titleMedium)),
-                      Padding(
-                          padding: p8,
-                          child: Text("Vehiculo",
-                              style: context.textTheme.titleMedium)),
-                      Padding(
-                          padding: p8,
-                          child: Text("Placa",
-                              style: context.textTheme.titleMedium)),
-                      Padding(
-                          padding: p8,
-                          child: Text("Combustible",
-                              style: context.textTheme.titleMedium)),
-                      Padding(
-                          padding: p8,
-                          child: Text("Banca",
-                              style: context.textTheme.titleMedium)),
-                      Padding(
-                          padding: p8,
-                          child: Text("Cantidad",
-                              style: context.textTheme.titleMedium)),
+                      Padding(padding: p8, child: Text("Usuario", style: context.textTheme.titleMedium)),
+                      Padding(padding: p8, child: Text("Vehiculo", style: context.textTheme.titleMedium)),
+                      Padding(padding: p8, child: Text("Placa", style: context.textTheme.titleMedium)),
+                      Padding(padding: p8, child: Text("Combustible", style: context.textTheme.titleMedium)),
+                      Padding(padding: p8, child: Text("Banca", style: context.textTheme.titleMedium)),
+                      Padding(padding: p8, child: Text("Cantidad", style: context.textTheme.titleMedium)),
                     ],
                   ),
                   ...ticket.details.map(
                     (detail) => TableRow(
                       decoration: BoxDecoration(
                         border: Border(
-                          bottom: BorderSide(
-                              color: context.colorScheme.onBackground
-                                  .withOpacity(0.1),
-                              width: 2),
+                          bottom: BorderSide(color: context.colorScheme.onBackground.withOpacity(0.1), width: 2),
                         ),
                       ),
                       children: [
                         Padding(
                           padding: p8,
-                          child: Text(detail.user.name,
-                              style: context.textTheme.titleMedium),
+                          child: Text(detail.user.name, style: context.textTheme.titleMedium),
                         ),
                         Padding(
                           padding: p8,
-                          child: Text(detail.vehicle.name,
-                              style: context.textTheme.titleMedium),
+                          child: Text(detail.vehicle.name, style: context.textTheme.titleMedium),
                         ),
                         Padding(
                           padding: p8,
-                          child: Text(detail.vehicle.code,
-                              style: context.textTheme.titleMedium),
+                          child: Text(detail.vehicle.code, style: context.textTheme.titleMedium),
                         ),
                         Padding(
                           padding: p8,
-                          child: Text(detail.fuel.name,
-                              style: context.textTheme.titleMedium),
+                          child: Text(detail.fuel.name, style: context.textTheme.titleMedium),
                         ),
                         Padding(
                           padding: p8,
-                          child: Text(detail.bettingBank?.name ?? "-",
-                              style: context.textTheme.titleMedium),
+                          child: Text(detail.bettingBank?.name ?? "-", style: context.textTheme.titleMedium),
                         ),
                         Padding(
                           padding: p8,
-                          child: Text(detail.quantity.toStringAsFixed(2),
-                              style: context.textTheme.titleMedium),
+                          child: Text(detail.quantity.toStringAsFixed(2), style: context.textTheme.titleMedium),
                         ),
                       ],
                     ),

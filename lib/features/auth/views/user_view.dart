@@ -29,12 +29,6 @@ class _UserViewState extends State<UserView> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    _pagedController?.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -58,6 +52,12 @@ class _UserViewState extends State<UserView> {
       body: Builder(builder: (context) {
         return PagedDataTable<String, String, UserEntity>(
           controller: _pagedController,
+          theme: PagedDataTableThemeData(
+            border: Border.all(color: context.colorScheme.outline),
+            rowsTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
+            headerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
+            footerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
+          ),
           fetchPage: (pageToken, pageSize, sortBy, filtering) async {
             try {
               final builder = database

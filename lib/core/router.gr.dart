@@ -41,10 +41,10 @@ abstract class _$AppRouter extends RootStackRouter {
         child: SignInView(key: args.key),
       );
     },
-    TicketFromRoute.name: (routeData) {
+    TicketFormRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const TicketFromView(),
+        child: const TicketFormView(),
       );
     },
     TicketRoute.name: (routeData) {
@@ -139,15 +139,15 @@ class SignInRouteArgs {
 }
 
 /// generated route for
-/// [TicketFromView]
-class TicketFromRoute extends PageRouteInfo<void> {
-  const TicketFromRoute({List<PageRouteInfo>? children})
+/// [TicketFormView]
+class TicketFormRoute extends PageRouteInfo<void> {
+  const TicketFormRoute({List<PageRouteInfo>? children})
       : super(
-          TicketFromRoute.name,
+          TicketFormRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'TicketFromRoute';
+  static const String name = 'TicketFormRoute';
 
   static const PageInfo<void> page = PageInfo<void>(name);
 }

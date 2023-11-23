@@ -3,7 +3,7 @@ description: A flutter plugin that prints esc commands to printers in different 
 version: 1.4.1
 
 environment:
-  sdk: '>=2.18.4 <3.3.10'
+  sdk: ">=2.18.4 <3.3.10"
   flutter: ">=1.20.0"
 
 dependencies:
@@ -23,7 +23,7 @@ dependencies:
 
 dev_dependencies:
   flutter_test:
-    sdk: flutter  
+    sdk: flutter
 flutter:
   plugin:
     platforms:
@@ -38,5 +38,3 @@ flutter:
   assets:
     - assets/resources/capabilities.json
     - packages/flutter_pos_printer_platform/resources/capabilities.json
-    
-  

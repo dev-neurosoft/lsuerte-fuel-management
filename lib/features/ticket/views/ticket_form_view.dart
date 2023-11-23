@@ -19,14 +19,14 @@ import '../../../core/router.dart';
 import '../../../core/services.dart';
 
 @RoutePage()
-class TicketFromView extends StatefulWidget {
-  const TicketFromView({super.key});
+class TicketFormView extends StatefulWidget {
+  const TicketFormView({super.key});
 
   @override
-  State<TicketFromView> createState() => _TicketFromViewState();
+  State<TicketFormView> createState() => _TicketFormViewState();
 }
 
-class _TicketFromViewState extends State<TicketFromView> {
+class _TicketFormViewState extends State<TicketFormView> {
   final _formKey = GlobalKey<FormBuilderState>();
   final _details = ValueNotifier<List<TicketDetailEntity>>([]);
 

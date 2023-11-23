@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:fuel_management/core/extension.dart';
 import 'package:paged_datatable/paged_datatable.dart';
 import 'package:postgrest/postgrest.dart';
 
@@ -19,6 +20,12 @@ class FuelView extends StatelessWidget {
       ),
       body: PagedDataTable<String, String, FuelEntity>(
         rowsSelectable: false,
+        theme: PagedDataTableThemeData(
+          border: Border.all(color: context.colorScheme.outline),
+          rowsTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
+          headerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
+          footerTextStyle: context.textTheme.bodyMedium ?? const TextStyle(),
+        ),
         fetchPage: (pageToken, pageSize, sortBy, filtering) async {
           try {
             final fuels = await database
@@ -56,32 +63,6 @@ class FuelView extends StatelessWidget {
                 .then((_) => true)
                 .onError((error, __) => false),
           ),
-          // DropdownTableColumn(
-          //   sizeFactor: null,
-          //   decoration: const InputDecoration(
-          //     border: InputBorder.none,
-          //     contentPadding: EdgeInsets.zero,
-          //     fillColor: Colors.transparent,
-          //   ),
-          //   title: "Activo",
-          //   getter: (item) => item.active,
-          //   setter: (item, newValue, rowIndex) => database
-          //       .from(FuelEntity.tableName)
-          //       .update({"active": newValue})
-          //       .eq(FuelEntity.primaryKey, item.id)
-          //       .then((_) => true)
-          //       .onError((_, __) => false),
-          //   items: [
-          //     const DropdownMenuItem(
-          //       value: true,
-          //       child: Text("Activo"),
-          //     ),
-          //     const DropdownMenuItem(
-          //       value: false,
-          //       child: Text("Inactivo"),
-          //     ),
-          //   ],
-          // ),
         ],
         idGetter: (item) => item.id,
       ),
