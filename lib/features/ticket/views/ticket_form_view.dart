@@ -147,7 +147,7 @@ class _TicketFormViewState extends State<TicketFormView> {
             SizedBox(
               width: 400,
               child: AsyncButtonBuilder(
-                child: const Text('Crear'),
+                child: const Text('Confirmar'),
                 onPressed: () => _onSubmit(context),
                 builder: (context, child, callback, _) {
                   return FilledButton(
@@ -238,6 +238,9 @@ class _TicketFormViewState extends State<TicketFormView> {
                 Flexible(
                   child: FormBuilderSearchableDropdown<UserEntity>(
                     name: 'user',
+                    clearButtonProps: const ClearButtonProps(
+                      isVisible: true,
+                    ),
                     decoration: const InputDecoration(label: Text("Usuarios"), isDense: true),
                     asyncItems: (text) => database
                         .from(UserEntity.tableName)
@@ -259,6 +262,9 @@ class _TicketFormViewState extends State<TicketFormView> {
                         dropdownDecoratorProps: const DropDownDecoratorProps(
                           dropdownSearchDecoration: InputDecoration(label: Text("Vehículos"), isDense: true),
                         ),
+                        clearButtonProps: const ClearButtonProps(
+                          isVisible: true,
+                        ),
                         asyncItems: (String filter) async {
                           return database
                               .from(VehicleEntity.tableName)
@@ -277,7 +283,10 @@ class _TicketFormViewState extends State<TicketFormView> {
                 Flexible(
                   child: FormBuilderSearchableDropdown<BettingBankEntity>(
                     name: 'bank',
-                    decoration: const InputDecoration(label: Text("Bancas"), isDense: true),
+                    clearButtonProps: const ClearButtonProps(
+                      isVisible: true,
+                    ),
+                    decoration: const InputDecoration(label: Text("Bancas (Opcional)"), isDense: true),
                     asyncItems: (text) {
                       return database
                           .from(BettingBankEntity.tableName)
