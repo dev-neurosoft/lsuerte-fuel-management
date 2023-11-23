@@ -41,12 +41,6 @@ class _VehicleViewState extends State<VehicleView> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    _pagedController.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(

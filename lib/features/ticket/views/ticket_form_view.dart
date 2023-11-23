@@ -218,7 +218,6 @@ class _TicketFromViewState extends State<TicketFromView> {
                           .from(VehicleAssignmentEntity.tableName)
                           .select<PostgrestList>(VehicleAssignmentEntity.select)
                           .ilike("users.name", "%$text%")
-                          .limit(10)
                           .withConverter((data) => data.map((e) => VehicleAssignmentEntity.fromJson(e)).toList()),
                       itemAsString: (item) => "${item.user.name} [${item.vehicle.code}]",
                       onChanged: (item) {
@@ -249,7 +248,6 @@ class _TicketFromViewState extends State<TicketFromView> {
                         .from(UserEntity.tableName)
                         .select<PostgrestList>(UserEntity.select)
                         .ilike("name", "%$text%")
-                        .limit(5)
                         .withConverter((data) => data.map((e) => UserEntity.fromJson(e)).toList()),
                     compareFn: (item1, item2) => item1 == item2,
                     itemAsString: (item) => item.name,
@@ -258,18 +256,26 @@ class _TicketFromViewState extends State<TicketFromView> {
                 ),
                 hgap(5),
                 Flexible(
-                  child: FormBuilderSearchableDropdown<VehicleEntity>(
+                  child: FormBuilderField<VehicleEntity>(
                     name: 'vehicle',
-                    decoration: const InputDecoration(label: Text("Vehículo"), isDense: true),
-                    asyncItems: (text) => database
-                        .from(VehicleEntity.tableName)
-                        .select<PostgrestList>(VehicleEntity.select)
-                        .ilike("name", "%$text%")
-                        .limit(5)
-                        .withConverter((data) => data.map((e) => VehicleEntity.fromJson(e)).toList()),
-                    compareFn: (item1, item2) => item1 == item2,
-                    itemAsString: (item) => "${item.name} [${item.code}]",
                     validator: FormBuilderValidators.required(),
+                    builder: (state) {
+                      return DropdownSearch<VehicleEntity>(
+                        dropdownDecoratorProps: const DropDownDecoratorProps(
+                          dropdownSearchDecoration: InputDecoration(label: Text("Vehículo"), isDense: true),
+                        ),
+                        asyncItems: (String filter) async {
+                          return database
+                              .from(VehicleEntity.tableName)
+                              .select<PostgrestList>(VehicleEntity.select)
+                              .ilike("name", "%$filter%")
+                              .withConverter((data) => data.map((e) => VehicleEntity.fromJson(e)).toList());
+                        },
+                        compareFn: (a, b) => a == b,
+                        itemAsString: (vehicle) => vehicle.name,
+                        onChanged: (data) => state.didChange(data),
+                      );
+                    },
                   ),
                 ),
                 hgap(5),
@@ -277,12 +283,13 @@ class _TicketFromViewState extends State<TicketFromView> {
                   child: FormBuilderSearchableDropdown<BettingBankEntity>(
                     name: 'bank',
                     decoration: const InputDecoration(label: Text("Banca"), isDense: true),
-                    asyncItems: (text) => database
-                        .from(BettingBankEntity.tableName)
-                        .select<PostgrestList>(BettingBankEntity.select)
-                        .ilike("name", "%$text%")
-                        .limit(5)
-                        .withConverter((data) => data.map((e) => BettingBankEntity.fromJson(e)).toList()),
+                    asyncItems: (text) {
+                      return database
+                          .from(BettingBankEntity.tableName)
+                          .select<PostgrestList>(BettingBankEntity.select)
+                          .ilike("name", "%$text%")
+                          .withConverter((data) => data.map((e) => BettingBankEntity.fromJson(e)).toList());
+                    },
                     compareFn: (item1, item2) => item1 == item2,
                     itemAsString: (item) => item.name,
                   ),
