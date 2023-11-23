@@ -238,7 +238,7 @@ class _TicketFormViewState extends State<TicketFormView> {
                 Flexible(
                   child: FormBuilderSearchableDropdown<UserEntity>(
                     name: 'user',
-                    decoration: const InputDecoration(label: Text("Usuario"), isDense: true),
+                    decoration: const InputDecoration(label: Text("Usuarios"), isDense: true),
                     asyncItems: (text) => database
                         .from(UserEntity.tableName)
                         .select<PostgrestList>(UserEntity.select)
@@ -257,7 +257,7 @@ class _TicketFormViewState extends State<TicketFormView> {
                     builder: (state) {
                       return DropdownSearch<VehicleEntity>(
                         dropdownDecoratorProps: const DropDownDecoratorProps(
-                          dropdownSearchDecoration: InputDecoration(label: Text("Vehículo"), isDense: true),
+                          dropdownSearchDecoration: InputDecoration(label: Text("Vehículos"), isDense: true),
                         ),
                         asyncItems: (String filter) async {
                           return database
@@ -267,7 +267,7 @@ class _TicketFormViewState extends State<TicketFormView> {
                               .withConverter((data) => data.map((e) => VehicleEntity.fromJson(e)).toList());
                         },
                         compareFn: (a, b) => a == b,
-                        itemAsString: (vehicle) => vehicle.name,
+                        itemAsString: (vehicle) => "${vehicle.name} [${vehicle.code}]",
                         onChanged: (data) => state.didChange(data),
                       );
                     },
@@ -277,7 +277,7 @@ class _TicketFormViewState extends State<TicketFormView> {
                 Flexible(
                   child: FormBuilderSearchableDropdown<BettingBankEntity>(
                     name: 'bank',
-                    decoration: const InputDecoration(label: Text("Banca"), isDense: true),
+                    decoration: const InputDecoration(label: Text("Bancas"), isDense: true),
                     asyncItems: (text) {
                       return database
                           .from(BettingBankEntity.tableName)
