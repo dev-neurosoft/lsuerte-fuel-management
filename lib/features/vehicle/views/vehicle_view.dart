@@ -26,7 +26,8 @@ class VehicleView extends StatefulWidget {
 
 class _VehicleViewState extends State<VehicleView> {
   final _controller = getIt.get<VehicleController>();
-  late final PagedDataTableController<String, String, VehicleEntity> _pagedController;
+  late final PagedDataTableController<String, String, VehicleEntity>
+      _pagedController;
 
   @override
   void initState() {
@@ -35,7 +36,8 @@ class _VehicleViewState extends State<VehicleView> {
     SchedulerBinding.instance.addPostFrameCallback(
       (_) {
         _controller.initialize();
-        _pagedController = PagedDataTableController<String, String, VehicleEntity>();
+        _pagedController =
+            PagedDataTableController<String, String, VehicleEntity>();
       },
     );
   }
@@ -71,13 +73,16 @@ class _VehicleViewState extends State<VehicleView> {
             failure: (message) => Center(
               child: Text(message ?? ""),
             ),
-            success: (brands, models, fuels) => PagedDataTable<String, String, VehicleEntity>(
+            success: (brands, models, fuels) =>
+                PagedDataTable<String, String, VehicleEntity>(
               initialPage: "",
               idGetter: (item) => item.id,
               fetchPage: (pageToken, pageSize, sortBy, filtering) async {
                 try {
-                  final builder = database.from(VehicleEntity.tableName).select<PostgrestListResponse>(
-                      VehicleEntity.select, const FetchOptions(count: CountOption.exact));
+                  final builder = database
+                      .from(VehicleEntity.tableName)
+                      .select<PostgrestListResponse>(VehicleEntity.select,
+                          const FetchOptions(count: CountOption.exact));
 
                   if (pageToken.isNotEmpty) {
                     builder.lt(VehicleEntity.primaryKey, pageToken);
@@ -95,12 +100,17 @@ class _VehicleViewState extends State<VehicleView> {
                     builder.eq("fuel_id", filtering.valueOrNull("fuel").id);
                   }
 
-                  final PostgrestResponse(:count, :data) =
-                      await builder.limit(pageSize).order(VehicleBrandEntity.primaryKey);
-                  final vehicles = data?.map((e) => VehicleEntity.fromJson(e)).toList() ?? [];
-                  final nextPage = vehicles.length < pageSize ? null : vehicles.last.id;
+                  final PostgrestResponse(:count, :data) = await builder
+                      .limit(pageSize)
+                      .order(VehicleBrandEntity.primaryKey);
+                  final vehicles =
+                      data?.map((e) => VehicleEntity.fromJson(e)).toList() ??
+                          [];
+                  final nextPage =
+                      vehicles.length < pageSize ? null : vehicles.last.id;
 
-                  return PaginationResult.items(elements: vehicles, size: count, nextPageToken: nextPage);
+                  return PaginationResult.items(
+                      elements: vehicles, size: count, nextPageToken: nextPage);
                 } on PostgrestException catch (error) {
                   return PaginationResult.error(error: error.message);
                 }
@@ -156,7 +166,10 @@ class _VehicleViewState extends State<VehicleView> {
                   getter: (item) => item.brand,
                   setter: (item, newValue, rowIndex) => database
                       .from(VehicleEntity.tableName)
-                      .update({"brand_id": newValue.id, "name": item.copyWith(brand: newValue).name})
+                      .update({
+                        "brand_id": newValue.id,
+                        "name": item.copyWith(brand: newValue).name
+                      })
                       .eq(VehicleEntity.primaryKey, item.id)
                       .then((_) => true)
                       .onError((_, __) => false),
@@ -164,7 +177,8 @@ class _VehicleViewState extends State<VehicleView> {
                     (e) {
                       return DropdownMenuItem(
                         value: e,
-                        child: Text(e.name),
+                        child: Text(e.name,
+                            style: const TextStyle(color: Colors.black)),
                       );
                     },
                   ).toList(),
@@ -180,7 +194,10 @@ class _VehicleViewState extends State<VehicleView> {
                   getter: (item) => item.model,
                   setter: (item, newValue, rowIndex) => database
                       .from(VehicleEntity.tableName)
-                      .update({"model_id": newValue.id, "name": item.copyWith(model: newValue).name})
+                      .update({
+                        "model_id": newValue.id,
+                        "name": item.copyWith(model: newValue).name
+                      })
                       .eq(VehicleEntity.primaryKey, item.id)
                       .then((_) => true)
                       .onError((_, __) => false),
@@ -188,7 +205,8 @@ class _VehicleViewState extends State<VehicleView> {
                     (e) {
                       return DropdownMenuItem(
                         value: e,
-                        child: Text(e.name),
+                        child: Text(e.name,
+                            style: const TextStyle(color: Colors.black)),
                       );
                     },
                   ).toList(),
@@ -212,7 +230,8 @@ class _VehicleViewState extends State<VehicleView> {
                     (e) {
                       return DropdownMenuItem(
                         value: e,
-                        child: Text(e.name),
+                        child: Text(e.name,
+                            style: const TextStyle(color: Colors.black)),
                       );
                     },
                   ).toList(),
@@ -234,7 +253,10 @@ class _VehicleViewState extends State<VehicleView> {
                   getter: (item) => item.year.toString(),
                   setter: (item, newValue, rowIndex) => database
                       .from(VehicleEntity.tableName)
-                      .update({"year": newValue, "name": item.copyWith(year: num.parse(newValue)).name})
+                      .update({
+                        "year": newValue,
+                        "name": item.copyWith(year: num.parse(newValue)).name
+                      })
                       .eq(VehicleEntity.primaryKey, item.id)
                       .then((_) => true)
                       .onError((_, __) => false),
@@ -367,7 +389,8 @@ class VehicleForm extends StatelessWidget {
                 vgap(10),
                 FormBuilderTextField(
                   name: 'quantity',
-                  decoration: const InputDecoration(label: Text("Capacidad Tanque Galones (Opcional)")),
+                  decoration: const InputDecoration(
+                      label: Text("Capacidad Tanque Galones (Opcional)")),
                   validator: FormBuilderValidators.numeric(),
                 ),
                 vgap(10),
@@ -379,7 +402,8 @@ class VehicleForm extends StatelessWidget {
                 vgap(10),
                 FormBuilderTextField(
                   name: 'kilometres',
-                  decoration: const InputDecoration(label: Text("Kilometros (Opcional)")),
+                  decoration: const InputDecoration(
+                      label: Text("Kilometros (Opcional)")),
                   validator: FormBuilderValidators.numeric(),
                 ),
                 vgap(10),
