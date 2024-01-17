@@ -62,7 +62,8 @@ class _UserViewState extends State<UserView> {
             try {
               final builder = database
                   .from(UserEntity.tableName)
-                  .select<PostgrestListResponse>(UserEntity.select, const FetchOptions(count: CountOption.exact));
+                  .select<PostgrestListResponse>(UserEntity.select, const FetchOptions(count: CountOption.exact))
+                  .eq("admin", false);
 
               if (pageToken.isNotEmpty) {
                 builder.lt(UserEntity.primaryKey, pageToken);

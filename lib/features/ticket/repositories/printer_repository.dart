@@ -35,7 +35,7 @@ final class PrinterRepository {
         return;
       }
 
-      for (PrinterDevice printer in availablePrinters) {
+      for (final printer in availablePrinters) {
         bool isConnected = await PrinterManager.instance.connect(
           type: PrinterType.usb,
           model: UsbPrinterInput(

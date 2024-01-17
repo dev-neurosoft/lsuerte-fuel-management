@@ -23,6 +23,7 @@ dependencies:
   intl: ^0.18.1
   paged_datatable: ^1.4.3
   async_button_builder: ^3.0.0+1
+  drop_down_search_field: ^1.0.0
 
   #* postgrest *#
   postgrest: ^1.5.1
