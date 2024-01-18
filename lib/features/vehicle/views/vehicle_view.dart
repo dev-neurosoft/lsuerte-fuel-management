@@ -45,9 +45,23 @@ class _VehicleViewState extends State<VehicleView> {
           centerTitle: false,
           actions: [
             Builder(
-              builder: (context) => FilledButton(
+              builder: (context) => FilledButton.icon(
+                onPressed: () => _pagedController.refresh(),
+                style: FilledButton.styleFrom(
+                  backgroundColor: MaterialStateColor.resolveWith(
+                    (_) => context.colorScheme.secondary,
+                  ),
+                ),
+                label: const Text("Recargar"),
+                icon: const Icon(Icons.refresh),
+              ),
+            ),
+            hgap(10),
+            Builder(
+              builder: (context) => FilledButton.icon(
                 onPressed: () => Scaffold.of(context).openEndDrawer(),
-                child: const Text("Agregar Vehículo"),
+                label: const Text("Agregar Vehículo"),
+                icon: const Icon(Icons.add),
               ),
             ),
             hgap(10),
@@ -69,6 +83,7 @@ class _VehicleViewState extends State<VehicleView> {
               child: Text(message ?? ""),
             ),
             success: (brands, models, fuels) => PagedDataTable<String, String, VehicleEntity>(
+              controller: _pagedController,
               initialPage: "",
               idGetter: (item) => item.id,
               theme: PagedDataTableThemeData(

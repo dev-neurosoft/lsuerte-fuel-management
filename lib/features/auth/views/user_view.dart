@@ -36,10 +36,22 @@ class _UserViewState extends State<UserView> {
         title: const Text("Usuarios"),
         centerTitle: false,
         actions: [
+          FilledButton.icon(
+            onPressed: () => _pagedController?.refresh(),
+            label: const Text("Recargar"),
+            icon: const Icon(Icons.refresh),
+            style: FilledButton.styleFrom(
+              backgroundColor: MaterialStateColor.resolveWith(
+                (_) => context.colorScheme.secondary,
+              ),
+            ),
+          ),
+          hgap(10),
           Builder(
-            builder: (context) => FilledButton(
+            builder: (context) => FilledButton.icon(
               onPressed: () => Scaffold.of(context).openEndDrawer(),
-              child: const Text("Agregar Usuario"),
+              label: const Text("Agregar Usuario"),
+              icon: const Icon(Icons.person_add),
             ),
           ),
           hgap(10),

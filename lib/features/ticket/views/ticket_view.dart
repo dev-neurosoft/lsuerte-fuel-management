@@ -70,11 +70,21 @@ class _TicketViewState extends State<TicketView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 1,
-        title: const Text("Tickets"),
-        centerTitle: false,
-      ),
+      appBar: AppBar(elevation: 1, title: const Text("Tickets"), centerTitle: false, actions: [
+        Builder(
+          builder: (context) => FilledButton.icon(
+            onPressed: () => _pagedController.refresh(),
+            style: FilledButton.styleFrom(
+              backgroundColor: MaterialStateColor.resolveWith(
+                (_) => context.colorScheme.secondary,
+              ),
+            ),
+            label: const Text("Recargar"),
+            icon: const Icon(Icons.refresh),
+          ),
+        ),
+        hgap(5),
+      ]),
       body: PagedDataTable<String, String, TicketEntity>(
         initialPage: "",
         controller: _pagedController,
